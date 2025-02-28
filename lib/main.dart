@@ -1,24 +1,48 @@
-import 'package:apitesting/screens/homepage.dart';
+import 'package:apitesting/presentations/pages/payment_page.dart';
+import 'package:apitesting/presentations/providers/payment_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
+import 'core/di/injection_cont.dart' as di;
+
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Enable performance profiling if needed
+  debugProfileBuildsEnabled = true;
+  debugProfilePaintsEnabled = true;
+
+  // Initialize dependency injection
+  di.init();
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
 
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: MultiProvider(
+
+
+        providers: [
+          ChangeNotifierProvider(
+            create: (_) => di.sl<PaymentProvider>(),
+          ),
+        ],
+        child: MaterialApp(
+          title: 'M-PESA Payment',
+          theme: ThemeData(
+            primarySwatch: Colors.green,
+          ),
+          home: const PaymentPage(),
+        ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
-
